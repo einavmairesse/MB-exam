@@ -19,13 +19,7 @@ def get_ips_by_hostnames():
 
     instance_list = str(output[1]).split('List:\\n\\n')[1].replace('\'', '"')
     instances = instance_list.split('\\n\\n\\n')[:-1]
-    print("------------------------")
-    print("------------------------")
-    print(instance_list)
-    print("------------------------")
-    print(instances)
-    print("------------------------")
-    print("------------------------")
+
     hostname_to_ip = {}
     for instance in instances:
         instance_details = ast.literal_eval(json.loads(json.dumps(str(instance).replace('\\n', ''))))
