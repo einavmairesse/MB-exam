@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Active Instances</title>
+</head>
+<body>
+    {% if instance_list %}
+    <form action="/tests/update/" method="post">
+        <table border="1">
+            <tr>
+                <td></td><td>Instance Name</td> <td>Instance Status</td> <td>Created At</td>
+            </tr>
+
+            {% for instance in instance_list %}
+            <tr>
+                <td><input type="checkbox" value="{{ instance.name }}" name="instanceNames"></td>
+                <td>{{ instance.name }}</td>
+                <td>{{ instance.status }}</td>
+                <td>{{ instance.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <input type="submit" name="operation" value="Start Test">
+        <input type="submit" name="operation" value="Terminate Selected"> <br><br>
+    </form>
+    {% endif %}
+        <form action="/instances/create/" method="POST">
+            Launch <input type="text" id="instanceCount" name="instanceCount"> new instances
+            <input type="submit" value="Launch">
+        </form>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Start Test</title>
+</head>
+<body>
+    <form>
+        Involved Instances:
+        {% for instance in instance_list %}
+            {{ instance }}
+        {% endfor %}
+    </form><br>
+    <form action="/tests/running_tests/" method="POST">
+        <input type="hidden" id="instanceNames" name="instanceNames" value="{{ instance_list }}">
+        <table>
+            <tr>
+                <td>Test Name:</td><td><input type="text" id="testName" name="testName"></td>
+            </tr>
+            <tr>
+                <td>Command to execute:</td><td><input type="text" id="command" name="command"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Start"></td>
+            </tr>
+        </table>
+
+    </form><br>
+    <a href="/instances/"><input type="button" value="Cancel"></a> <br><br>
+</body>
+</html>

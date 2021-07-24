@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Running Tests</title>
+</head>
+<body>
+    {% if test_list %}
+    <form action="/tests/stop/" method="POST">
+        <table border="1">
+            <tr>
+                <td></td><td>Test Name</td> <td>Test Status</td> <td>Number Of Instances</td> <td>Created At</td>
+            </tr>
+
+            {% for test in test_list %}
+            <tr>
+                <td><input type="checkbox" value="{{ test.name }}" name="testNames"></td>
+                <td>{{ test.name }}</td>
+                <td>{{ test.status }}</td>
+                <td>{{ test.number_of_instances }}</td>
+                <td>{{ test.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <input type="submit" value="Stop">
+    </form>
+    {% else %}
+        <p>No tests are running</p>
+    {% endif %}
+</body>
+</html>
