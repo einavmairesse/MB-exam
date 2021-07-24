@@ -36,6 +36,7 @@ def start_test(test_name, instance_names, command_to_execute):
 
     print('Getting IPs')
     hostname_to_ip = get_ips_by_hostnames()
+    print("Instance names: " + str(instance_names))
     for instance_name, instance_ip in hostname_to_ip.items():
         if instance_name not in instance_names:
             continue
