@@ -28,7 +28,7 @@ def get_ips_by_hostnames():
     print("------------------------")
     hostname_to_ip = {}
     for instance in instances:
-        instance_details = ast.literal_eval(json.loads(json.dumps(str(instance))))
+        instance_details = ast.literal_eval(json.loads(json.dumps(str(instance).strip())))
         instance_ip = instance_details.get("networkInterfaces")[0].get("accessConfigs")[0].get('natIP')
         instance_name = instance_details.get("name")
         hostname_to_ip[instance_name] = instance_ip
