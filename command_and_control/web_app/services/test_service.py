@@ -18,7 +18,7 @@ def get_ips_by_hostnames():
         print('An error occurred while fetching running instances')
 
     instance_list = str(output[1]).split('List:\\n\\n')[1].replace('\'', '"')
-    instances = instance_list.split('\\n\\n\\n')
+    instances = instance_list.split('\\n\\n\\n')[:-1]
     print("------------------------")
     print("------------------------")
     print(instance_list)
