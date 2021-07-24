@@ -17,8 +17,15 @@ def get_ips_by_hostnames():
     if output[0] is False:
         print('An error occurred while fetching running instances')
 
-    instance_list = str(output[1]).split('\\r\\n\\r\\n')[1].replace('\'', '"')
-    instances = instance_list.split('\\r\\n\\r\\n\\r\\n')
+    instance_list = str(output[1]).split('List:\\n\\n')[1].replace('\'', '"')
+    instances = instance_list.split('\\n\\n\\n')
+    print("------------------------")
+    print("------------------------")
+    print(instance_list)
+    print("------------------------")
+    print(instances)
+    print("------------------------")
+    print("------------------------")
     hostname_to_ip = {}
     for instance in instances:
         instance_details = ast.literal_eval(json.loads(json.dumps(str(instance))))
