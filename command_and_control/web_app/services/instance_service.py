@@ -13,7 +13,7 @@ def create_instances(number_of_instances):
             return False, result[1]
         else:
             print("Created an instance successfully")
-            instance_name = str(result[1]).split('\\r\\n')[0].split(' ')[1]
+            instance_name = str(result[1]).split('\\r\\n')[0].split(' ')[1].replace('\\nOperation', '')
             Instances(name=instance_name, status='Running', created_at=datetime.now()).save()
 
     return True, ''
