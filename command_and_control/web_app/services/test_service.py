@@ -34,6 +34,7 @@ def start_test(test_name, instance_names, command_to_execute):
     if len(instance_names) < 1:
         raise InstanceNumberTooLow
 
+    print('Getting IPs')
     hostname_to_ip = get_ips_by_hostnames()
     for instance_name, instance_ip in hostname_to_ip.items():
         if instance_name not in instance_names:
@@ -44,11 +45,13 @@ def start_test(test_name, instance_names, command_to_execute):
             'command': command_to_execute
         }
 
-        response = requests.post('http://' + instance_ip + ':8000/start/', data=json.dumps(data))
+        print('Sending request')
+        response = requests.post('http://' + str(instance_ip) + ':8000/start/', data=json.dumps(data))
 
         if response.status_code != 200:
             print("Error while starting a test: ", response.reason)
 
+        print('Status code: ', response.status_code)
         process_id = response.json()['process_id']
         InstancesTests.objects.filter(test_name=test_name, instance_name=instance_name).update(process_id=process_id)
 
@@ -65,7 +68,7 @@ def stop_tests(test_names):
             data = {'process_id': process_id}
 
             instance_ip = hostname_to_ip.get(instance_name)
-            response = requests.post('http://' + instance_ip + ':8000/stop/', data=data)
+            response = requests.post('http://' + str(instance_ip) + ':8000/stop/', data=data)
 
             if response.status_code != 200:
                 print("Error while stoping test: ", response.reason)

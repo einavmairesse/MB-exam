@@ -55,6 +55,7 @@ def start_test_page(request):
 
 @csrf_exempt
 def running_tests_page(request):
+    print('Received request')
     instance_names = ast.literal_eval(request.POST.get('instanceNames'))
     test_name = request.POST.get('testName')
     command_to_execute = request.POST.get('command')
@@ -62,6 +63,7 @@ def running_tests_page(request):
     if is_test_name_exists(test_name):
         return start_test_page(request)
 
+    print('Creating test')
     create_instances_tests_in_db(instance_names, test_name)
     create_test_in_db(instance_names, test_name)
 
@@ -70,6 +72,7 @@ def running_tests_page(request):
     except InstanceNumberTooLow:
         return instances_page(request)
 
+    print('Redirecting to page')
     tests = Tests.objects.all()
     template = loader.get_template('web_app/running_tests.html')
     context = {'test_list': tests}
