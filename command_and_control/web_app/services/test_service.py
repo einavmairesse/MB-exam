@@ -46,7 +46,7 @@ def start_test(test_name, instance_names, command_to_execute):
             'command': command_to_execute
         }
 
-        print('Sending request')
+        print('Sending request to: http://' + str(instance_ip) + ':8000/start/')
         response = requests.post('http://' + str(instance_ip) + ':8000/start/', data=json.dumps(data))
 
         if response.status_code != 200:
