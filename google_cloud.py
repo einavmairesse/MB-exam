@@ -6,7 +6,7 @@ import os
 V1_BASE_URL = 'https://www.googleapis.com/compute/v1/projects/mbexam-5'
 google_key_file = os.path.dirname(__file__) + "/mbexam-5-d37beb826749.p12"
 client_email = 'mb-exam-5@mbexam-5.iam.gserviceaccount.com'
-base_image_name = V1_BASE_URL + '/global/images/attacking-bot-image-2'
+base_image_name = V1_BASE_URL + '/global/images/attacking-bot-image-3'
 
 
 def get_access_credentials():
