@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
 import os
+import time
 
-# mb-exam-5
 V1_BASE_URL = 'https://www.googleapis.com/compute/v1/projects/mbexam-5'
-google_key_file = os.path.dirname(__file__) + "/mbexam-5-d37beb826749.p12"
+google_key_file = "mbexam-5-d37beb826749.p12"
 client_email = 'mb-exam-5@mbexam-5.iam.gserviceaccount.com'
-base_image_name = V1_BASE_URL + '/global/images/attacking-bot-image-4'
+base_image_name = V1_BASE_URL + '/global/images/cnc-image-4'
 
 
 def get_access_credentials():
@@ -73,48 +73,23 @@ def list_instances():
     return instances
 
 
-def delete_instance(instance_name, rc='europe-west1-b'):
-    import json, requests
-    url = V1_BASE_URL + '/zones/%s/instances/%s' % (rc, instance_name)
-    token = get_access_credentials().get_access_token().access_token
-    headers = {'Authorization': 'Bearer %s' % token, 'content-type': "application/json"}
+if __name__ == '__main__':
+    print('Creating instance, please wait..')
+    response = create_instance(instance_name='cnc-server', image_name=base_image_name, size='n1-highcpu-2')
+    instance_id = response['targetId']
 
-    r = requests.delete(url, headers=headers)
-    if int(r.status_code) != 200:
-        raise Exception("Google: Unable to delete instance in %s. %s" % (str(rc), str(r.__dict__)))
+    grace_period_in_seconds = 5
+    time.sleep(grace_period_in_seconds)
 
-    res = r.json()
-    return res
+    instance_list = list_instances()
+    for instance in instance_list:
+        if instance['id'] == instance_id:
+            extended_grace_period_in_seconds = grace_period_in_seconds * 4
+            print('Giving the server a grace period of {} seconds..'.format(extended_grace_period_in_seconds))
+            time.sleep(extended_grace_period_in_seconds)
+            instance_external_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
+            print('Command&Control server is ready! Please navigate to http://' + instance_external_ip
+                  + ":8000/instances/")
+            break
 
 
-if __name__ == "__main__":
-    import argparse
-
-    arg_parser = argparse.ArgumentParser(description="Minimal Google Compute CLI")
-    arg_parser.add_argument('command', help='Command: list|create|delete.')
-    arg_parser.add_argument('-i', '--instance-name', help='Instance name for delete command.', default=None)
-    args = arg_parser.parse_args()
-
-    if args.command == 'list':
-        print("List:")
-        for instance in list_instances():
-            print("")
-            print(instance)
-            print("")
-
-    elif args.command == 'create':
-        import uuid
-
-        instance_name = 'mbexam-' + str(uuid.uuid4())
-
-        print("Creating", instance_name)
-        res = create_instance(instance_name=instance_name, image_name=base_image_name, size='n1-highcpu-2')
-        print("Operation Result:", res)
-
-    elif args.command == 'delete':
-        print("Deleting %s:" % str(args.instance_name))
-        res = delete_instance(args.instance_name)
-        print("Operation Result:", res)
-
-    else:
-        raise Exception("Illegal Command '%s'" % args.command)
